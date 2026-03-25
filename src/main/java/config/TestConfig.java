@@ -12,10 +12,6 @@ public final class TestConfig {
         return System.getProperty("browser", "chrome");
     }
 
-    /**
-     * Remote run flag (Selenium Grid).
-     * Example: -Dremote=true -DgridUrl=http://localhost:4444/wd/hub
-     */
     public static boolean remote() {
         return Boolean.parseBoolean(System.getProperty("remote", "false"));
     }

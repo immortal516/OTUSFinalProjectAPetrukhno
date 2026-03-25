@@ -1,8 +1,12 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import java.time.Duration;
 
 public class WishlistsPage extends BasePage {
     private static final String PATH = "/wishlists";
@@ -54,7 +58,26 @@ public class WishlistsPage extends BasePage {
                         "//button[normalize-space(.)='Просмотр']"
         );
 
-        wait.until(ExpectedConditions.elementToBeClickable(viewButton)).click();
+        var button = wait.until(ExpectedConditions.presenceOfElementLocated(viewButton));
+        wait.until(ExpectedConditions.visibilityOf(button));
+
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block:'center'});",
+                button
+        );
+
+        wait.until(ExpectedConditions.elementToBeClickable(button));
+
+        try {
+            new Actions(driver)
+                    .moveToElement(button)
+                    .pause(Duration.ofMillis(100))
+                    .click()
+                    .perform();
+        } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", button);
+        }
+
         wait.until(d -> d.getCurrentUrl().matches(".*/wishlists/[0-9a-f\\-]{36}.*"));
     }
 
@@ -66,7 +89,19 @@ public class WishlistsPage extends BasePage {
                         "//button[contains(@class,'btn-danger') and normalize-space(.)='Удалить']"
         );
 
-        wait.until(ExpectedConditions.elementToBeClickable(deleteButton)).click();
+        var button = wait.until(ExpectedConditions.elementToBeClickable(deleteButton));
+
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block:'center'});",
+                button
+        );
+
+        new Actions(driver)
+                .moveToElement(button)
+                .pause(Duration.ofMillis(100))
+                .click()
+                .perform();
+
         wait.until(ExpectedConditions.invisibilityOfElementLocated(cardTitle));
     }
 }
