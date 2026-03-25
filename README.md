@@ -5,6 +5,14 @@ UI автотесты для https://wishlist.otus.kartushin.su
 ## Стек
 Java, Maven, JUnit5, Selenium WebDriver, WebDriverManager, log4j2, Page Object.
 
+## Архитектура проекта
+
+- `config` — чтение параметров запуска из System properties (`baseUrl`, `browser`, `login/password`, `remote/gridUrl`).
+- `core` — создание WebDriver (`DriverFactory`): локальный запуск через WebDriverManager и удалённый запуск через Selenium Grid.
+- `pages` — Page Object’ы страниц приложения (Login, Wishlists, WishlistDetails, Users) и общие элементы (NavBar).
+- `pages.components` — Page Object’ы UI-компонентов (модальные окна), например `AddGiftModal`.
+- `tests` — автотесты (JUnit5) и базовый класс `WebDriverBaseTest` со стартом/остановкой браузера.
+
 ## Критичные сценарии (автотесты)
 
 1. Авторизация пользователя (LoginTest)
